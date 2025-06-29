@@ -309,11 +309,15 @@
                 transform: translateY(-100px) scale(1.5);
             }
         }
+        
     </style>
 </head>
 <body>
     <!-- Animated stars background -->
     <div class="stars" id="stars"></div>
+    
+    <!-- Skip button for testing -->
+    <div class="skip-btn" onclick="unlockSite()" style="display: none;" id="skipBtn"></div>
     
     <div class="container">
         <div class="content-box">
@@ -346,7 +350,7 @@
                 <input type="text" id="password" class="password-input" placeholder="Enter your love's name..." maxlength="20">
                 <button class="btn" onclick="checkPassword()">Unlock My Heart</button>
                 <div id="password-error" style="color: #ff6b6b; margin-top: 10px; display: none;">
-                    Try again, my love. Think of who made this just for you ✨
+                    Try again, my love ✨
                 </div>
             </div>
             
@@ -398,14 +402,14 @@
                 <h2>📸 Our Beautiful Memories 📸</h2>
                 <p>Here are some of our precious moments together:</p>
                 <div class="gallery">
-                      <img src="img1.jpg" alt="Our precious memory" class="gallery-item">
-<img src="img2.jpg" alt="Our precious memory" class="gallery-item">
-<img src="img3.jpg" alt="Our precious memory" class="gallery-item">
-<img src="img4.jpg" alt="Our precious memory" class="gallery-item">
-<img src="img5.jpg" alt="Our precious memory" class="gallery-item">
-<img src="img6.jpg" alt="Our precious memory" class="gallery-item">
-<img src="img7.jpg" alt="Our precious memory" class="gallery-item">
-<img src="img8.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img1.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img2.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img3.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img4.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img5.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img6.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img7.jpg" alt="Our precious memory" class="gallery-item">
+                    <img src="img8.jpg" alt="Our precious memory" class="gallery-item">
                 </div>
                 <p style="font-style: italic; color: #666; margin: 20px 0;">
                     Each photo tells a story of our love, and I treasure every single moment we've captured together.
@@ -444,6 +448,8 @@
     </audio>
 
     <script>
+        let countdownInterval;
+        
         // Initialize stars background
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -486,7 +492,16 @@
         }
         
         function unlockSite() {
+            // Clear the countdown interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            // Hide waiting screen and skip button
             document.getElementById('waiting-screen').style.display = 'none';
+            document.getElementById('skipBtn').style.display = 'none';
+            
+            // Show password stage
             document.getElementById('stage1').classList.add('active');
         }
         
@@ -610,19 +625,26 @@
         
         // Enter key support for password
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('password').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
-            });
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkPassword();
+                    }
+                });
+            }
         });
         
         // Initialize the website
         function init() {
             createStars();
             
-            // Start directly with Stage 1 (password entry)
-            unlockSite();
+            // Show the skip button for testing
+            document.getElementById('skipBtn').style.display = 'block';
+            
+            // Start the countdown timer
+            updateCountdown(); // Update immediately
+            countdownInterval = setInterval(updateCountdown, 1000); // Update every second
         }
         
         // Start the website when page loads
